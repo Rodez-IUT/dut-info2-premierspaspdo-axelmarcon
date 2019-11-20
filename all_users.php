@@ -24,8 +24,37 @@
 			} catch (PDOException $e) {
 				throw new PDOException($e->getMessage(), (int)$e->getCode());
 			}
-			?>
+			
+			if( isset($_POST["lettre"])) {
+				$lettre_username = $_POST["lettre"];
+			}
+			if( isset($_POST["status"])) {
+				$status_id = $_POST["status"];
+			}
+		?>
 			<h1>All Users</h1>
+			
+			<form method="post" action="all_users.php">
+			
+				<label for="lettre">Start with letter </label>
+				<input type="text" id="lettre" name="lettre" required maxlength="1" size="2"
+				<?php if (isset($lettre_username)){ echo "value='$lettre_username'"; } ?>
+				/>
+				
+				<label for="status">and status is  </label>
+				<select id="status" name="status" />
+					<option value="1"
+					<?php if (isset($status_id) && $status_id == 1){ echo "selected"; } ?>
+					/>Waiting for account validation</option>
+					<option value="2"
+					<?php if (isset($status_id) && $status_id == 2){ echo "selected"; } ?>
+					>Active account</option>
+				</select>
+				
+				<input type="submit" value="Rechercher" />
+				
+			</form>
+			
 			<table>
 				<tr>
 					<th>ID</th>
@@ -34,9 +63,11 @@
 					<th>Status name</th>
 				</tr>
 				<?php
-					$status_id = 2;
-					$lettre_username = 'e';
-					$stmt = $pdo->query('SELECT users.id, username, email, status.name FROM users JOIN status ON users.status_id = status.id WHERE status.id="'.$status_id.'" AND username LIKE "'.$lettre_username.'%" ORDER BY username');
+					if ( isset($lettre_username, $status_id)) {
+						$stmt = $pdo->query('SELECT users.id, username, email, status.name FROM users JOIN status ON users.status_id = status.id WHERE status.id="'.$status_id.'" AND username LIKE "'.$lettre_username.'%" ORDER BY username');
+					} else {
+						$stmt = $pdo->query('SELECT users.id, username, email, status.name FROM users JOIN status ON users.status_id = status.id ORDER BY username');
+					}
 					while ($row = $stmt->fetch()){
 						echo "<tr><td>".$row['id']."</td><td>".$row['username']."</td><td>".$row['email']."</td><td>".$row['name']."</td></tr>\n";
 					}
