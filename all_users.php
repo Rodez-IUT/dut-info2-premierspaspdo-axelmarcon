@@ -28,13 +28,15 @@
 			<h1>All Users</h1>
 			<table>
 				<tr>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
+					<th>ID</th>
+					<th>Username</th>
+					<th>Email</th>
+					<th>Status name</th>
 				</tr>
 				<?php
-					$stmt = $pdo->query('SELECT users.id, username, email, status.name FROM users JOIN status ON users.status_id = status.id ORDER BY username');
+					$status_id = 2;
+					$lettre_username = 'e';
+					$stmt = $pdo->query('SELECT users.id, username, email, status.name FROM users JOIN status ON users.status_id = status.id WHERE status.id="'.$status_id.'" AND username LIKE "'.$lettre_username.'%" ORDER BY username');
 					while ($row = $stmt->fetch()){
 						echo "<tr><td>".$row['id']."</td><td>".$row['username']."</td><td>".$row['email']."</td><td>".$row['name']."</td></tr>\n";
 					}
