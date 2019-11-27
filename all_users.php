@@ -31,6 +31,21 @@
 			if( isset($_POST["status"])) {
 				$status_id = $_POST["status"];
 			}
+			
+			if(isset($_GET["status_id"], $_GET["user_id"], $_GET["action"])) {
+				try {
+					$pdo->beginTransaction();
+					$stmt = $pdo->prepare("INSERT INTO users (name) VALUES (?)");  //TODO à faire
+					
+					$pdo->commit();
+				}catch (Exception $e){
+					$pdo->rollBack();
+					throw $e;
+				}
+			}
+			
+			
+			
 		?>
 			<h1>All Users</h1>
 			
