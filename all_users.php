@@ -75,7 +75,11 @@
 						$stmt = $pdo->query('SELECT users.id, username, email, status.name FROM users JOIN status ON users.status_id = status.id ORDER BY username');
 					}
 					while ($row = $stmt->fetch()){
-						echo "<tr><td>".$row['id']."</td><td>".$row['username']."</td><td>".$row['email']."</td><td>".$row['name']."</td></tr>\n";
+						if($row['name'] == "Waiting for account deletion") {
+							echo "<tr><td>".$row['id']."</td><td>".$row['username']."</td><td>".$row['email']."</td><td>".$row['name']."</td></tr>\n";
+						} else {
+							echo "<tr><td>".$row['id']."</td><td>".$row['username']."</td><td>".$row['email']."</td><td>".$row['name']."</td><td><a href='all_users.php?status_id=3&user_id=".$row['id']."&action=askDeletion'>Ask deletion</a></td></tr>\n";
+						}
 					}
 				?>
 			</table>
