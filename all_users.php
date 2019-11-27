@@ -37,7 +37,7 @@
 			<form method="post" action="all_users.php">
 			
 				<label for="lettre">Start with letter </label>
-				<input type="text" id="lettre" name="lettre" required maxlength="1" size="2"
+				<input type="text" id="lettre" name="lettre"  maxlength="1" size="2"
 				<?php if (isset($lettre_username)){ echo "value='$lettre_username'"; } ?>
 				/>
 				
@@ -49,11 +49,16 @@
 					<option value="2"
 					<?php if (isset($status_id) && $status_id == 2){ echo "selected"; } ?>
 					>Active account</option>
+					<option value="3"
+					<?php if (isset($status_id) && $status_id == 3){ echo "selected"; } ?>
+					>Waiting for account deletion</option>
 				</select>
 				
 				<input type="submit" value="Rechercher" />
 				
 			</form>
+			
+			<br/>
 			
 			<table>
 				<tr>
@@ -64,8 +69,8 @@
 				</tr>
 				<?php
 					if ( isset($lettre_username, $status_id)) {
-						$stmt = $pdo->prepare('SELECT users.id, username, email, status.name FROM users JOIN status ON users.status_id = status.id WHERE status.id= :status_id AND username LIKE :lettre_username% ORDER BY username');
-						$stmt->execute(['status_id' => $status_id, 'lettre_username' => $lettre_username]);
+						$stmt = $pdo->prepare('SELECT users.id, username, email, status.name FROM users JOIN status ON users.status_id = status.id WHERE status.id= :status_id AND username LIKE :lettre_username ORDER BY username');
+						$stmt->execute(['status_id' => $status_id, 'lettre_username' => $lettre_username.'%']);
 					} else {
 						$stmt = $pdo->query('SELECT users.id, username, email, status.name FROM users JOIN status ON users.status_id = status.id ORDER BY username');
 					}
