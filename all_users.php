@@ -64,7 +64,8 @@
 				</tr>
 				<?php
 					if ( isset($lettre_username, $status_id)) {
-						$stmt = $pdo->query('SELECT users.id, username, email, status.name FROM users JOIN status ON users.status_id = status.id WHERE status.id="'.$status_id.'" AND username LIKE "'.$lettre_username.'%" ORDER BY username');
+						$stmt = $pdo->prepare('SELECT users.id, username, email, status.name FROM users JOIN status ON users.status_id = status.id WHERE status.id= :status_id AND username LIKE :lettre_username% ORDER BY username');
+						$stmt->execute(['status_id' => $status_id, 'lettre_username' => $lettre_username]);
 					} else {
 						$stmt = $pdo->query('SELECT users.id, username, email, status.name FROM users JOIN status ON users.status_id = status.id ORDER BY username');
 					}
