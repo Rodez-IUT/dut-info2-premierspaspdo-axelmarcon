@@ -1,0 +1,1 @@
+Rien ne se passe de précis, aucun résulatat n'est renvoyé. Cela ne garde seulement les 2 premiers caracteres de la chaine entrée.
