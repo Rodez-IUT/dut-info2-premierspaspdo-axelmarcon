@@ -6,26 +6,30 @@
 		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
-		<?php
-			$host = 'localhost';
-			$db   = 'my_activities';
-			$user = 'root';
-			$pass = 'root';
-			$charset = 'utf8mb4';
-			$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-			$options = [
-				PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-				PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-				PDO::ATTR_EMULATE_PREPARES   => false,
-			];
+<?php
+	spl_autoload_extensions(".php");
+	spl_autoload_register();
+
+	use yasmf\DataSource;
+	use yasmf\Router;
+
+	// have to create a dummy "hello_world" database...
+	$dataSource = new DataSource(
+    $host = 'localhost',
+    $port = '3306',
+    $db = 'my_activities',
+    $user = 'root',
+    $pass = 'root',
+    $charset = 'utf8mb4'
+	);
+	
+	try {
+		$pdo = $dataSource->getPDO();
+	} catch (PDOException $e) {
+		throw new PDOException($e->getMessage(), (int)$e->getCode());
+	}
 			
-			try {
-				$pdo = new PDO($dsn, $user, $pass, $options);
-			} catch (PDOException $e) {
-				throw new PDOException($e->getMessage(), (int)$e->getCode());
-			}
-			
-			if( isset($_POST["lettre"])) {
+	if( isset($_POST["lettre"])) {
 				$lettre_username = $_POST["lettre"];
 			}
 			if( isset($_POST["status"])) {
